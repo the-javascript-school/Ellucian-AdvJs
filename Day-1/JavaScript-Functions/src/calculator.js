@@ -6,8 +6,7 @@ function add(){
 		if (!!arg.length) return add.apply(this,arg);
 		return arg;
 	}
-	var result = 0;
-	for(var i=0;i<arguments.length;i++)
-		result += parseArg(arguments[i]);
-	return result;
+	return arguments.length == 0 ? 0 : 
+		(arguments.length == 1 ? parseArg(arguments[0]) 
+			: parseArg(arguments[0]) + add.apply(this,[].splice.call(arguments,1)));
 }

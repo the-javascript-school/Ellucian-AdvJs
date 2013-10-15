@@ -1,0 +1,46 @@
+
+function display(){
+	console.log(this.id,this.name,this.units,this.cost);
+}
+
+function map(list,operation){
+ for(var i=0;i<list.length;i++) 
+ 	operation(list[i]);
+}
+
+function displayProducts(products){
+ map(products,function(p){p.display();});
+}
+
+var products = [{id:1, name:"pen", units:10, cost:12 }
+,{id:4, name:"hen", units:5, cost:10}
+,{id:7, name:"ken", units:7, cost:25}
+,{id:2, name:"len", units:23, cost:89}
+,{id:6, name:"ten", units:24, cost:45}
+,{id:9, name:"den", units:12, cost:34}]
+
+function sort(products,productComparer){
+  for(var i=0;i<products.length-1;i++)
+    for(var j=i+1;j<products.length;j++)
+      if (productComparer(products[i], products[j]) > 0){
+         var temp = products[i];
+         products[i] = products[j];
+         products[j] = temp;
+      }
+}
+
+function filter(products,filterCriteria){
+  var result = [];
+  for(var i=0;i<products.length;i++)
+    if (filterCriteria(products[i])) result.push(products[i]);
+  return result;
+}
+
+function pluck(list,attrName){
+  var result =[];
+  for(var i=0;i<list.length;i++){
+    result.push(list[i][attrName]);
+  }
+  return result;
+}
+
