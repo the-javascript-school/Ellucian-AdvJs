@@ -16,15 +16,19 @@
  	(function(window,document){
  		window.addEventListener("DOMContentLoaded",initialize);
  		function initialize(){
- 			document.getElementById("btnAdd").addEventListener("click",onBtnAddClick);
- 			document.getElementById("btnRemove").addEventListener("click",onBtnRemoveClick);
+ 			$("#btnAdd").click(onBtnAddClick);
+ 			$("#btnRemove").click(onBtnRemoveClick);
  			attachOnClickToDefaultTasks();
  		}
  		function onBtnAddClick(){
- 			var txtTask = document.getElementById("txtTask");
- 			var newTask = "<li>" + txtTask.value + "</li>";
- 			var ulTaskList = document.getElementById("ulTaskList");
- 			ulTaskList.innerHTML += newTask;
+ 			var $txtTask = $("#txtTask");
+ 			var $ulTaskList = $("#ulTaskList");
+
+ 			var $newTask = $("<li>");
+ 			$newTask.click(onTaskClick);
+ 			$newTask.html($txtTask.val());
+ 			$ulTaskList.append($newTask);
+
  			displayMessage("A new task is added");
  		}
  		function onBtnRemoveClick(){
@@ -51,7 +55,7 @@
  			}
  		}
  		function displayMessage(msg){
- 			document.getElementById("divMessage").innerHTML = msg;
+ 			$("#divMessage").html(msg);
  		}
 
  	}(window,document));
