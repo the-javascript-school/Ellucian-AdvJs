@@ -6,6 +6,7 @@
 	<script src="jquery-1.10.2.js"></script>
 	<script>
 	$(function(){
+		var calculator = new SalaryCalculator();
 		$("#btnCalculate").attr('disabled',true);
 		$("#spanTax").html($("#rangeTax").val());
 
@@ -21,16 +22,42 @@
 		});
 
 		$("#btnCalculate").click(function(){
-			var basic = parseInt($("#txtBasic").val()),
-				hra = parseInt($("#txtHra").val()),
-				da = parseInt($("#txtDa").val()),
-				tax = parseInt($("#rangeTax").val()),
-				gross = basic + hra + da,
-				net = gross * ((100-tax)/100);
-			$("#divResult").html(net);
+			calculator.basic(parseInt($("#txtBasic").val()));
+			calculator.hra(parseInt($("#txtHra").val()));
+			calculator.da(parseInt($("#txtDa").val()));
+			calculator.tax(parseInt($("#rangeTax").val()));
+			calculator.calculate();
+			$("#divResult").html(calculator.salary());
 
-		})
+		});
 	})
+	function SalaryCalculator(){
+		var _basic = _hra = _da = _tax = _salary = 0;
+		this.basic = function(){
+			if (arguments.length === 0) return _basic;
+			_basic = arguments[0];
+		};
+		this.hra = function(){
+			if (arguments.length === 0) return _hra;
+			_hra = arguments[0];
+		};
+		this.da = function(){
+			if (arguments.length === 0) return _da;
+			_da = arguments[0];
+		};
+		this.tax = function(){
+			if (arguments.length === 0) return _tax;
+			_tax = arguments[0];
+		};
+		this.calculate = function(){
+			var gross = _basic + _hra + _da;
+			_salary = gross * ((100-_tax)/100);	
+			console.log(_salary);
+		};		
+		this.salary = function(){
+			return _salary;
+		}
+	}
 	</script>
 </head>
 <body><div><span>Basic :</span><input type="text" name="" id="txtBasic"></div>
