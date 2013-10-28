@@ -1,0 +1,23 @@
+<!doctype html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<script src="jquery-1.10.2.js"></script>
+	<script>
+		function displayFullName(){
+		  var firstName = $("#txtFirstName").val();
+		  var lastName = $("#txtLastName").val();
+		  var fullName = firstName + "," + lastName;
+		  $("#divMessage").text(fullName);
+		}
+	</script>
+	<title></title>
+</head>
+<body>
+	<input type="text" name="" id="txtId">
+	<input type="text" name="" id="txtFirstName" class="nameControl">
+	<input type="text" name="" id="txtLastName" class="nameControl">
+	<input type="button" value="Save" id="btnSave">
+	<div id="divMessage"></div>
+</body>
+</html>

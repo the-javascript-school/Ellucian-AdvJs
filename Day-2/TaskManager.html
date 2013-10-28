@@ -1,0 +1,87 @@
+<!-- 
+	1. Add a task
+	2. List all the tasks
+	3. Mark/unmark a task as completed (visually different)
+	4. Remove completed tasks
+	5. Display a message whenever a task is added or removed
+ -->
+
+ <!doctype html>
+ <html lang="en">
+ <head>
+ 	<meta charset="UTF-8">
+ 	<title>Task Manager</title>
+ 	<script src="jquery-1.10.2.js"></script>
+ 	<script>
+ 	(function(window,document){
+ 		window.addEventListener("DOMContentLoaded",initialize);
+ 		function initialize(){
+ 			document.getElementById("btnAdd").addEventListener("click",onBtnAddClick);
+ 			document.getElementById("btnRemove").addEventListener("click",onBtnRemoveClick);
+ 			attachOnClickToDefaultTasks();
+ 		}
+ 		function onBtnAddClick(){
+ 			var txtTask = document.getElementById("txtTask");
+ 			var newTask = "<li>" + txtTask.value + "</li>";
+ 			var ulTaskList = document.getElementById("ulTaskList");
+ 			ulTaskList.innerHTML += newTask;
+ 			displayMessage("A new task is added");
+ 		}
+ 		function onBtnRemoveClick(){
+ 			var ulTaskList = document.getElementById("ulTaskList");
+ 			var allTasks = ulTaskList.children;
+ 			for(var i=allTasks.length-1;i>=0;i--){
+ 				if (allTasks[i].classList.contains("completed"))
+ 					allTasks[i].remove();
+ 			}
+ 			displayMessage("one or more completed tasks are removed");
+ 		}
+ 		function onTaskClick(){
+ 			if (this.classList.contains("completed")){
+ 				this.classList.remove("completed");
+ 			} else {
+ 				this.classList.add("completed");
+ 			}
+ 		}
+ 		function attachOnClickToDefaultTasks(){
+ 			var ulTaskList = document.getElementById("ulTaskList");
+ 			var allTasks = ulTaskList.children;
+ 			for(var i=0;i<allTasks.length;i++){
+ 				allTasks[i].addEventListener("click",onTaskClick);
+ 			}
+ 		}
+ 		function displayMessage(msg){
+ 			document.getElementById("divMessage").innerHTML = msg;
+ 		}
+
+ 	}(window,document));
+
+ 	</script>
+ 	<style>
+		.completed {
+			color :red;
+			text-decoration: line-through;
+			font-style: italic;
+			font-weight: bold;
+		}
+ 	</style>
+ </head>
+ <body>
+ 	
+ 	<!-- h1{Task Manager}+span{Task :}+input:text#txtTask+input:button#btnAdd[value="Add"]+input:button#btnRemove[value="Remove"]+ul#ulTaskList>li{Task-$}*3^div#divMessage -->
+
+ 	<h1>Task Manager</h1>
+ 	<span>Task :</span>
+ 	<input type="text" name="" id="txtTask">
+ 	<input type="button" value="Add" id="btnAdd">
+ 	<input type="button" value="Remove" id="btnRemove">
+ 	<ul id="ulTaskList">
+ 		<li>Task-1</li>
+ 		<li>Task-2</li>
+ 		<li>Task-3</li>
+ 	</ul>
+ 	<div id="divMessage"></div>
+ </body>
+ </html>
+
+
