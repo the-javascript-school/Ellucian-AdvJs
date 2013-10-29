@@ -6,61 +6,113 @@
 	<script src="jquery-1.10.2.js"></script>
 	<script>
 	$(function(){
-		var calculator = new SalaryCalculator();
-		$("#btnCalculate").attr('disabled',true);
-		$("#spanTax").html($("#rangeTax").val());
-
-		$("#txtBasic,#txtHra,#txtDa").change(function(){
-			var buttonEnabled = true;
-			$("#txtBasic,#txtHra,#txtDa").each(function(){
-				buttonEnabled = $(this).val() !== ""
+		window.calculator = new SalaryCalculator();
+		window.calculatorView = new SalaryCalculatorView(window.calculator);
+		window.calculatorView2 = new SalaryCalculatorView(window.calculator);
+		calculatorView.initialize();
+		calculatorView2.initialize();
+		$("body").eq(0).append(calculatorView.$root);
+		$("body").eq(0).append(calculatorView2.$root);
+	});
+	function SalaryCalculatorView(model){
+		var that = this;
+		var calculator = model;
+		this.initialize =  function(){
+			this.$root = $($("#salaryTemplate").html());
+			this.$root.find("#btnCalculate").attr('disabled',true);	
+			this.$root.find("#spanTax").html($("#rangeTax").val());	
+			this.$root.find("#txtBasic,#txtHra,#txtDa").change(function(){
+				var buttonEnabled = true;
+				that.$root.find("#txtBasic,#txtHra,#txtDa").each(function(){
+					buttonEnabled = $(this).val() !== ""
+				});
+				that.$root.find("#btnCalculate").attr('disabled',!buttonEnabled);
 			});
-			$("#btnCalculate").attr('disabled',!buttonEnabled);
-		});
-		$("#rangeTax").change(function(){
-			$("#spanTax").html($(this).val());
-		});
 
-		$("#btnCalculate").click(function(){
-			calculator.basic(parseInt($("#txtBasic").val()));
-			calculator.hra(parseInt($("#txtHra").val()));
-			calculator.da(parseInt($("#txtDa").val()));
-			calculator.tax(parseInt($("#rangeTax").val()));
-			calculator.calculate();
-			$("#divResult").html(calculator.salary());
+			this.$root.find("#rangeTax").change(function(){
+				$("#spanTax").html($(this).val());
+			});
+			this.$root.find("#txtBasic").change(function(){
+				calculator.basic(parseInt(this.value));
+			});
+			this.$root.find("#txtHra").change(function(){
+				calculator.hra(parseInt(this.value));
+			});
+			this.$root.find("#txtDa").change(function(){
+				calculator.da(parseInt(this.value));
+			});
+			this.$root.find("#rangeTax").change(function(){
+				calculator.tax(parseInt(this.value));
+			});
+			this.$root.find("#btnCalculate").click(function(){
+				calculator.calculate();
+			});
+			calculator.addModelChange('salary',function(){
+				that.$root.find("#divResult").html(calculator.salary());
+			});
+			calculator.addModelChange('basic',function(){
+				that.$root.find("#txtBasic").val(calculator.basic());
+			});
+			calculator.addModelChange('hra',function(){
+				that.$root.find("#txtHra").val(calculator.hra());
+			});
+			calculator.addModelChange('da',function(){
+				that.$root.find("#txtDa").val(calculator.da());
+			});
+			calculator.addModelChange('tax',function(){
+				that.$root.find("#rangeTax").val(calculator.tax());
+				that.$root.find("#spanTax").html(calculator.tax());
+			});
 
-		});
-	})
+		}
+	}
 	function SalaryCalculator(){
 		var _basic = _hra = _da = _tax = _salary = 0;
 		this.basic = function(){
 			if (arguments.length === 0) return _basic;
 			_basic = arguments[0];
+			triggerModelChangeFor('basic');
 		};
 		this.hra = function(){
 			if (arguments.length === 0) return _hra;
 			_hra = arguments[0];
+			triggerModelChangeFor('hra');
 		};
 		this.da = function(){
 			if (arguments.length === 0) return _da;
 			_da = arguments[0];
+			triggerModelChangeFor('da');
 		};
 		this.tax = function(){
 			if (arguments.length === 0) return _tax;
 			_tax = arguments[0];
+			triggerModelChangeFor('tax');
 		};
 		this.calculate = function(){
 			var gross = _basic + _hra + _da;
 			_salary = gross * ((100-_tax)/100);	
+			triggerModelChangeFor('salary');
 			console.log(_salary);
 		};		
+		function triggerModelChangeFor(attrName){
+			for(var i=0;i<_callbacks[attrName].length;i++){
+				_callbacks[attrName][i]();
+			}
+		}
 		this.salary = function(){
 			return _salary;
 		}
+		var _callbacks = {};
+		this.addModelChange = function(attrName,callback){
+			if (!_callbacks[attrName]) _callbacks[attrName] = [];
+			_callbacks[attrName].push(callback);
+		};
 	}
 	</script>
-</head>
-<body><div><span>Basic :</span><input type="text" name="" id="txtBasic"></div>
+	<script type="text/template" id="salaryTemplate">
+	<h1>Salary Calculator</h1>
+		<div><span>Basic :</span><input type="text" name="" id="txtBasic"></div>
+	
 	<div><span>Hra :</span><input type="text" name="" id="txtHra"></div>
 	<div><span>Da :</span><input type="text" name="" id="txtDa"></div>
 	<div>
@@ -69,6 +121,15 @@
 		<span id="spanTax">[Tax]</span>
 	</div>
 	<div><input type="button" value="Calculate" id="btnCalculate"></div>
-	<div id="divResult"></div>
+	<div>
+	<div id="divResult">[Salary]</div>
+	</div>
+	<br>
+	<br>
+	<br>
+	<hr/>
+	</script>
+</head>
+<body>
 </body>
 </html>
