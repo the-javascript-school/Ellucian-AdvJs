@@ -1,0 +1,49 @@
+<!doctype html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>Salary Calculator</title>
+	<script src="angular.js"></script>
+	<script>
+		function salaryCalculatorCtrl($scope){
+			$scope.calculator = {
+				basic : 10000,
+				hra : 2000,
+				da : 3000,
+				tax : 10,
+				salary : 0,
+				calculate : function(){
+					var gross = this.basic + this.hra + this.da;
+					this.salary = ((100 - this.tax)/100) * gross;
+					console.log(gross,this.salary);
+				}
+			};
+
+		}
+	</script>
+</head>
+<body ng-app>
+	<div ng-controller="salaryCalculatorCtrl">
+		<h3>Salary Calculator</h3>
+		<div><span>Basic :</span><input type="text" name="" id="" ng-model="calculator.basic"></div>
+		<div><span>Hra :</span><input type="text" name="" id="" ng-model="calculator.hra"></div>
+		<div><span>Da :</span><input type="text" name="" id="" ng-model="calculator.da"></div>
+		<div><span>Tax :</span><input type="range" name="" id="" min="0" max="50" ng-model="calculator.tax"><span>{{calculator.tax}}</span></div>
+		<div><input type="button" value="Calculate" ng-click="calculator.calculate()"></div>
+		<h3 id="salary">
+			{{calculator.salary}}
+		</h3>
+	</div>
+	<div ng-controller="salaryCalculatorCtrl">
+		<h3>Salary Calculator</h3>
+		<div><span>Basic :</span><input type="text" name="" id="" ng-model="calculator.basic"></div>
+		<div><span>Hra :</span><input type="text" name="" id="" ng-model="calculator.hra"></div>
+		<div><span>Da :</span><input type="text" name="" id="" ng-model="calculator.da"></div>
+		<div><span>Tax :</span><input type="range" name="" id="" min="0" max="50" ng-model="calculator.tax"><span>{{calculator.tax}}</span></div>
+		<div><input type="button" value="Calculate" ng-click="calculator.calculate()"></div>
+		<h3 id="salary">
+			{{calculator.salary}}
+		</h3>
+	</div>
+</body>
+</html>
