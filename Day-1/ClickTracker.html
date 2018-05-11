@@ -7,14 +7,14 @@
 	(function(){
 		var counter = 0;
 		function initialize(){
-			document.getElementById("btnTrack").onclick = function(){
+			document.getElementById("btnTrack NC").onclick = function(){
 				counter++;
 				displayMessage(counter);
 			};
 		}
 		
 		function displayMessage(msg){
-			document.getElementById("divMessage").innerHTML = msg;
+			document.getElementById("divMessage NC").innerHTML = msg;
 		}
 		window.onload = initialize;
 	}());
